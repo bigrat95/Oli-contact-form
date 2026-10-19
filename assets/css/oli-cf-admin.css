@@ -1,0 +1,28 @@
+/**
+ * Admin styles for Oli Contact Form
+ */
+
+.oli-cf-form-editor {
+	margin: 15px 0;
+}
+
+.oli-cf-tag-generator {
+	margin-bottom: 15px;
+	padding: 10px;
+	background: #f5f5f5;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+}
+
+.oli-cf-tag-generator .button {
+	margin: 2px;
+}
+
+#oli-cf-form-template {
+	font-family: Consolas, Monaco, monospace;
+	font-size: 13px;
+}
+
+.oli-cf-form-control-wrap {
+	display: inline-block;
+}

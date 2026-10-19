@@ -1,0 +1,187 @@
+/**
+ * Public styles for Oli Contact Form
+ * Minimal, themeable CSS
+ */
+
+.oli-cf-container {
+	max-width: 100%;
+	margin: 0 auto;
+}
+
+.oli-cf-form {
+	display: block;
+}
+
+.oli-cf-form label {
+	display: block;
+	margin-bottom: 8px;
+	font-weight: 600;
+}
+
+.oli-cf-form-control-wrap {
+	display: block;
+	width: 100%;
+	margin-bottom: 15px;
+}
+
+.oli-cf-field {
+	width: 100%;
+	padding: 8px 12px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 16px;
+	font-family: inherit;
+	line-height: 1.5;
+	transition: border-color 0.2s;
+}
+
+.oli-cf-field:focus {
+	outline: none;
+	border-color: #0073aa;
+	box-shadow: 0 0 0 1px #0073aa;
+}
+
+.oli-cf-field.oli-cf-invalid {
+	border-color: #dc3232;
+}
+
+.oli-cf-field.oli-cf-invalid:focus {
+	box-shadow: 0 0 0 1px #dc3232;
+}
+
+.oli-cf-textarea {
+	min-height: 120px;
+	resize: vertical;
+}
+
+.oli-cf-select,
+.oli-cf-file {
+	display: block;
+	width: 100%;
+}
+
+.oli-cf-checkbox,
+.oli-cf-radio,
+.oli-cf-acceptance {
+	width: auto;
+	margin-right: 6px;
+}
+
+.oli-cf-list-item {
+	display: block;
+	margin-bottom: 8px;
+}
+
+.oli-cf-list-item label {
+	display: inline-flex;
+	align-items: center;
+	font-weight: normal;
+	margin-bottom: 0;
+	cursor: pointer;
+}
+
+.oli-cf-list-item-label {
+	margin-left: 4px;
+}
+
+.oli-cf-submit {
+	padding: 10px 24px;
+	background-color: #0073aa;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	font-size: 16px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+
+.oli-cf-submit:hover {
+	background-color: #005a87;
+}
+
+.oli-cf-submit:focus {
+	outline: none;
+	box-shadow: 0 0 0 2px rgba(0, 115, 170, 0.3);
+}
+
+.oli-cf-submit:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.oli-cf-response-output {
+	margin-bottom: 15px;
+}
+
+.oli-cf-response-success,
+.oli-cf-response-error {
+	padding: 12px 15px;
+	border-radius: 4px;
+	margin-bottom: 15px;
+}
+
+.oli-cf-response-success {
+	background-color: #d4edda;
+	border: 1px solid #c3e6cb;
+	color: #155724;
+}
+
+.oli-cf-response-error {
+	background-color: #f8d7da;
+	border: 1px solid #f5c6cb;
+	color: #721c24;
+}
+
+.oli-cf-validation-errors {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.oli-cf-validation-errors li {
+	padding: 8px 12px;
+	background-color: #f8d7da;
+	border: 1px solid #f5c6cb;
+	color: #721c24;
+	border-radius: 4px;
+	margin-bottom: 8px;
+}
+
+.oli-cf-spinner {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border: 2px solid rgba(255, 255, 255, 0.3);
+	border-top-color: #fff;
+	border-radius: 50%;
+	animation: oli-cf-spin 0.6s linear infinite;
+	margin-left: 8px;
+	vertical-align: middle;
+}
+
+@keyframes oli-cf-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* Screen reader only */
+.oli-cf-sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+	.oli-cf-field {
+		font-size: 16px;
+	}
+}
