@@ -5,6 +5,10 @@
  * @package Oli_Contact_Form
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Public class.
  */
@@ -56,6 +60,12 @@ class Oli_CF_Public {
 	 *
 	 * Called from the shortcode/block when a form actually renders, and from
 	 * wp_enqueue_scripts when the queried post already contains a form.
+	 *
+	 * Google reCAPTCHA and Cloudflare Turnstile client scripts are official
+	 * service APIs. They cannot be self-hosted: the providers require their
+	 * CDN scripts so tokens can be issued. They are loaded only when an
+	 * administrator has enabled the service and this request is rendering a
+	 * form (shortcode or block).
 	 */
 	public static function enqueue_form_assets() {
 		if ( self::$assets_enqueued ) {
@@ -65,9 +75,10 @@ class Oli_CF_Public {
 		$settings = get_option( 'oli_cf_settings', array() );
 		$deps     = array( 'jquery' );
 
-		if ( ! empty( $settings['recaptcha_enabled'] ) && ! empty( $settings['recaptcha_site_key'] ) ) {
+		if ( self::recaptcha_client_should_load( $settings ) ) {
 			wp_enqueue_script(
 				'oli-cf-recaptcha',
+				// phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent -- Official Google reCAPTCHA v3 API; must be served by Google and cannot be self-hosted. Loaded only when reCAPTCHA is enabled and a form is present.
 				'https://www.google.com/recaptcha/api.js?render=' . rawurlencode( $settings['recaptcha_site_key'] ),
 				array(),
 				'3',
@@ -76,9 +87,10 @@ class Oli_CF_Public {
 			$deps[] = 'oli-cf-recaptcha';
 		}
 
-		if ( ! empty( $settings['turnstile_enabled'] ) && ! empty( $settings['turnstile_site_key'] ) ) {
+		if ( self::turnstile_client_should_load( $settings ) ) {
 			wp_enqueue_script(
 				'oli-cf-turnstile',
+				// phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent -- Official Cloudflare Turnstile widget API; must be served by Cloudflare and cannot be self-hosted. Loaded only when Turnstile is enabled and a form is present.
 				'https://challenges.cloudflare.com/turnstile/v0/api.js',
 				array(),
 				'v0',
@@ -109,12 +121,32 @@ class Oli_CF_Public {
 			array(
 				'ajaxUrl'          => admin_url( 'admin-ajax.php' ),
 				'nonce'            => wp_create_nonce( 'oli_cf_submit' ),
-				'recaptchaSiteKey' => ! empty( $settings['recaptcha_enabled'] ) ? $settings['recaptcha_site_key'] : '',
-				'turnstileSiteKey' => ! empty( $settings['turnstile_enabled'] ) ? $settings['turnstile_site_key'] : '',
+				'recaptchaSiteKey' => self::recaptcha_client_should_load( $settings ) ? $settings['recaptcha_site_key'] : '',
+				'turnstileSiteKey' => self::turnstile_client_should_load( $settings ) ? $settings['turnstile_site_key'] : '',
 			)
 		);
 
 		self::$assets_enqueued = true;
+	}
+
+	/**
+	 * Whether the official reCAPTCHA client script should load on this request.
+	 *
+	 * @param array $settings Plugin settings.
+	 * @return bool
+	 */
+	private static function recaptcha_client_should_load( $settings ) {
+		return ! empty( $settings['recaptcha_enabled'] ) && ! empty( $settings['recaptcha_site_key'] );
+	}
+
+	/**
+	 * Whether the official Turnstile client script should load on this request.
+	 *
+	 * @param array $settings Plugin settings.
+	 * @return bool
+	 */
+	private static function turnstile_client_should_load( $settings ) {
+		return ! empty( $settings['turnstile_enabled'] ) && ! empty( $settings['turnstile_site_key'] );
 	}
 
 	/**

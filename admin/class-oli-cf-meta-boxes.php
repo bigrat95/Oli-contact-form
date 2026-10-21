@@ -5,6 +5,10 @@
  * @package Oli_Contact_Form
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Meta boxes class.
  */
@@ -117,7 +121,10 @@ class Oli_CF_Meta_Boxes {
 			</tr>
 			<tr>
 				<th><label for="oli-cf-mail-from"><?php esc_html_e( 'From', 'oli-contact-form' ); ?></label></th>
-				<td><input type="text" name="oli_cf_mail[from]" id="oli-cf-mail-from" value="<?php echo esc_attr( $mail['from'] ); ?>" class="large-text" /></td>
+				<td>
+					<input type="text" name="oli_cf_mail[from]" id="oli-cf-mail-from" value="<?php echo esc_attr( $mail['from'] ); ?>" class="large-text" />
+					<p class="description"><?php esc_html_e( 'Use the site admin email. Putting the visitor address in From often fails SPF/DMARC. Put [your-email] in Reply-To instead.', 'oli-contact-form' ); ?></p>
+				</td>
 			</tr>
 			<tr>
 				<th><label for="oli-cf-mail-subject"><?php esc_html_e( 'Subject', 'oli-contact-form' ); ?></label></th>
@@ -313,6 +320,7 @@ class Oli_CF_Meta_Boxes {
 			'    [text* your-subject] </label>' . "\n\n" .
 			'<label> ' . __( 'Your message', 'oli-contact-form' ) . "\n" .
 			'    [textarea your-message] </label>' . "\n\n" .
+			'[acceptance consent "' . __( 'I consent to having this website store my submitted information so they can respond to my inquiry.', 'oli-contact-form' ) . '"]' . "\n\n" .
 			'[submit "' . __( 'Send', 'oli-contact-form' ) . '"]';
 	}
 
@@ -324,7 +332,7 @@ class Oli_CF_Meta_Boxes {
 	private function get_default_mail() {
 		return array(
 			'to'                 => get_option( 'admin_email' ),
-			'from'               => '[your-email]',
+			'from'               => get_option( 'admin_email' ),
 			'subject'            => 'New message from [your-name]',
 			'body'               => "From: [your-name] <[your-email]>\nSubject: [your-subject]\n\nMessage:\n[your-message]",
 			'reply_to'           => '[your-email]',

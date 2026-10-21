@@ -5,6 +5,10 @@
  * @package Oli_Contact_Form
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Anti-spam class.
  */
@@ -74,7 +78,10 @@ class Oli_CF_Anti_Spam {
 			);
 		}
 
+		// Official Google reCAPTCHA verification endpoint. Tokens issued by
+		// Google's client script can only be verified on Google's servers.
 		$response = wp_remote_post(
+			// phpcs:ignore PluginCheck.CodeAnalysis.Offloading.OffloadedContent -- Official Google reCAPTCHA siteverify API (server-side). Required by the service and cannot be self-hosted. Called only when reCAPTCHA is enabled and a form is submitted.
 			'https://www.google.com/recaptcha/api/siteverify',
 			array(
 				'body' => array(
@@ -119,7 +126,10 @@ class Oli_CF_Anti_Spam {
 			);
 		}
 
+		// Official Cloudflare Turnstile verification endpoint. Tokens issued
+		// by Cloudflare's widget can only be verified on Cloudflare's servers.
 		$response = wp_remote_post(
+			// phpcs:ignore PluginCheck.CodeAnalysis.Offloading.OffloadedContent -- Official Cloudflare Turnstile siteverify API (server-side). Required by the service and cannot be self-hosted. Called only when Turnstile is enabled and a form is submitted.
 			'https://challenges.cloudflare.com/turnstile/v0/siteverify',
 			array(
 				'body' => array(

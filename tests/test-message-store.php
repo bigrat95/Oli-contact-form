@@ -2,6 +2,9 @@
 /**
  * CLI tests for Oli_CF_Message_Store helpers (no WordPress bootstrap).
  *
+ * Excluded from the plugin ZIP. This harness is not loaded by WordPress, so
+ * it stubs functions instead of exiting when ABSPATH is undefined.
+ *
  * @package Oli_Contact_Form
  */
 

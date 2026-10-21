@@ -5,6 +5,17 @@ All notable changes to Oli Contact Form will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-10-21
+
+### Fixed
+- Add `ABSPATH` direct-access guards to every plugin PHP file (Plugin Check).
+- Keep official reCAPTCHA and Turnstile CDN/API URLs (they cannot be self-hosted). Load client scripts only when the service is enabled and the page has a form; document the exception in `readme.txt` and `REVIEW-NOTES.md`.
+
+### Changed
+- Default notification `From` is the site admin email. `[your-email]` stays in `Reply-To` to avoid SPF/DMARC failures.
+- Default form template includes an optional consent checkbox (`[acceptance consent …]` without `*`).
+- Distribution ZIP excludes development files via `.distignore` and `.gitattributes` `export-ignore`.
+
 ## [0.2.0] - 2026-10-21
 
 ### Added

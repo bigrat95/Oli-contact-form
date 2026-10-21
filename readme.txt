@@ -4,7 +4,7 @@ Tags: contact form, form, email, ajax, contact
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.2.0
+Stable tag: 0.2.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,13 +41,17 @@ Google reCAPTCHA v3 and Cloudflare Turnstile stay off until an administrator ena
 
 This plugin does not call any third-party API by default. The built-in honeypot and time trap run entirely on your WordPress site. The following services are used only after an administrator enables them under Oli Contact Forms → Settings.
 
+**Why remote scripts are required:** Google reCAPTCHA v3 and Cloudflare Turnstile are third-party anti-spam services. Their client scripts must be loaded from the provider CDN (`www.google.com` / `challenges.cloudflare.com`). Tokens are issued and signed by those services and can only be verified on their servers. The scripts cannot be copied into this plugin or self-hosted: a local copy would not mint valid tokens. They are therefore not “offloaded plugin assets”; they are the official service APIs. The plugin never loads them unless (1) an administrator has enabled the service and saved a site key, and (2) the current page actually contains a form (shortcode or block). Server-side `siteverify` calls run only on submit, and only when that service is enabled.
+
+Source code: [https://github.com/olivierbigras/Oli-contact-form](https://github.com/olivierbigras/Oli-contact-form)
+
 = Google reCAPTCHA v3 =
 
-When **Enable Google reCAPTCHA v3** is checked and a site key is saved, visitors who view a form load Google's reCAPTCHA script so a token can be generated. On submit, WordPress verifies that token with Google.
+When **Enable Google reCAPTCHA v3** is checked and a site key is saved, visitors who view a form load Google's official reCAPTCHA script so a token can be generated. On submit, WordPress verifies that token with Google. The script is not bundled because Google requires `https://www.google.com/recaptcha/api.js`.
 
-* When it runs: only if reCAPTCHA is enabled; the script is enqueued on pages that contain a form (shortcode or block), and verification runs on each submission.
-* Client script: `https://www.google.com/recaptcha/api.js` (with your site key as the `render` parameter).
-* Server endpoint: `https://www.google.com/recaptcha/api/siteverify` via `wp_remote_post`.
+* When it runs: only if reCAPTCHA is enabled **and** the page has a form (shortcode or block). Verification runs on each submission.
+* Client script (official CDN, cannot be self-hosted): `https://www.google.com/recaptcha/api.js` (with your site key as the `render` parameter).
+* Server endpoint: `https://www.google.com/recaptcha/api/siteverify` via `wp_remote_post` (only on submit, only if enabled).
 * Data sent: the visitor's reCAPTCHA response token, your reCAPTCHA secret key, and the visitor's IP address (`remoteip`). Google may also collect device and interaction data as described in their privacy policy.
 * Service: [https://www.google.com/recaptcha/](https://www.google.com/recaptcha/)
 * Terms: [https://policies.google.com/terms](https://policies.google.com/terms)
@@ -55,11 +59,11 @@ When **Enable Google reCAPTCHA v3** is checked and a site key is saved, visitors
 
 = Cloudflare Turnstile =
 
-When **Enable Cloudflare Turnstile** is checked and a site key is saved, visitors who view a form load Cloudflare's Turnstile widget. On submit, WordPress verifies the widget token with Cloudflare.
+When **Enable Cloudflare Turnstile** is checked and a site key is saved, visitors who view a form load Cloudflare's official Turnstile widget. On submit, WordPress verifies the widget token with Cloudflare. The script is not bundled because Cloudflare requires `https://challenges.cloudflare.com/turnstile/v0/api.js`.
 
-* When it runs: only if Turnstile is enabled; the script is enqueued on pages that contain a form (shortcode or block), and verification runs on each submission.
-* Client script: `https://challenges.cloudflare.com/turnstile/v0/api.js`
-* Server endpoint: `https://challenges.cloudflare.com/turnstile/v0/siteverify` via `wp_remote_post`.
+* When it runs: only if Turnstile is enabled **and** the page has a form (shortcode or block). Verification runs on each submission.
+* Client script (official CDN, cannot be self-hosted): `https://challenges.cloudflare.com/turnstile/v0/api.js`
+* Server endpoint: `https://challenges.cloudflare.com/turnstile/v0/siteverify` via `wp_remote_post` (only on submit, only if enabled).
 * Data sent: the visitor's Turnstile response token, your Turnstile secret key, and the visitor's IP address (`remoteip`). Cloudflare may also collect device and challenge data as described in their privacy policy.
 * Service: [https://www.cloudflare.com/products/turnstile/](https://www.cloudflare.com/products/turnstile/)
 * Terms: [https://www.cloudflare.com/website-terms/](https://www.cloudflare.com/website-terms/)
@@ -137,6 +141,13 @@ Yes. The plugin includes minimal CSS that you can override in your theme. All fo
 
 == Changelog ==
 
+= 0.2.1 =
+* Add ABSPATH direct-access guards to every plugin PHP file.
+* Load reCAPTCHA and Turnstile CDN scripts only when the service is enabled and the page has a form; document why they cannot be self-hosted.
+* Default notification From is the site admin email; the visitor address stays in Reply-To (SPF/DMARC).
+* Add an optional consent checkbox to the default form template.
+* Exclude development files from the distribution ZIP.
+
 = 0.2.0 =
 * Optional “Keep a copy of messages” setting (off by default).
 * Stored copies use the `{prefix}oli_cf_messages` table and a Messages admin list (date, form, sender, preview, detail).
@@ -168,6 +179,9 @@ Yes. The plugin includes minimal CSS that you can override in your theme. All fo
 * Accessible and multilingual ready
 
 == Upgrade Notice ==
+
+= 0.2.1 =
+New forms use the site admin email as From (visitor email in Reply-To) and include an optional consent checkbox. Existing forms are unchanged.
 
 = 0.2.0 =
 Optional stored message copies (off by default), retention purge, and WordPress privacy tools.

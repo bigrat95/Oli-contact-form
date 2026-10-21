@@ -2,7 +2,7 @@
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Oli Contact Form 0.1.0\n"
+"Project-Id-Version: Oli Contact Form 0.2.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/oli-contact-form\n"
 "POT-Creation-Date: 2026-10-19 00:00:00+00:00\n"
 "MIME-Version: 1.0\n"
@@ -203,6 +203,9 @@ msgstr ""
 msgid "Use [field-name] to insert field values."
 msgstr ""
 
+msgid "Use the site admin email. Putting the visitor address in From often fails SPF/DMARC. Put [your-email] in Reply-To instead."
+msgstr ""
+
 msgid "Reply-To"
 msgstr ""
 
@@ -237,6 +240,9 @@ msgid "Your subject"
 msgstr ""
 
 msgid "Your message"
+msgstr ""
+
+msgid "I consent to having this website store my submitted information so they can respond to my inquiry."
 msgstr ""
 
 msgid "Send"

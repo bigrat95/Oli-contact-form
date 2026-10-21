@@ -5,6 +5,10 @@
  * @package Oli_Contact_Form
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Submission handler class.
  */

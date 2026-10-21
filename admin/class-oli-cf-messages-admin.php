@@ -5,6 +5,10 @@
  * @package Oli_Contact_Form
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Messages admin page.
  */

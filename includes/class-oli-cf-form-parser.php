@@ -5,6 +5,10 @@
  * @package Oli_Contact_Form
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Form parser class.
  */
@@ -84,7 +88,7 @@ class Oli_CF_Form_Parser {
 				return self::render_radio( $name, $required, $options, $form_id );
 
 			case 'acceptance':
-				return self::render_acceptance( $name, $options, $form_id );
+				return self::render_acceptance( $name, $required, $options, $form_id );
 
 			case 'file':
 				return self::render_file( $name, $required, $options, $form_id );
@@ -324,13 +328,19 @@ class Oli_CF_Form_Parser {
 	 * Render acceptance field.
 	 *
 	 * @param string $name     Field name.
+	 * @param bool   $required Is required. Optional consent uses `[acceptance ...]` without `*`.
 	 * @param array  $options  Field options.
 	 * @param int    $form_id  Form ID.
 	 * @return string HTML.
 	 */
-	private static function render_acceptance( $name, $options, $form_id ) {
+	private static function render_acceptance( $name, $required, $options, $form_id ) {
 		$id    = 'oli-cf-' . $form_id . '-' . sanitize_key( $name );
-		$label = ! empty( $options ) ? implode( ' ', $options ) : __( 'I accept the terms', 'oli-contact-form' );
+		$label = ! empty( $options ) ? trim( implode( ' ', $options ), '"' ) : __( 'I accept the terms', 'oli-contact-form' );
+		$class = 'oli-cf-field oli-cf-acceptance';
+
+		if ( $required ) {
+			$class .= ' oli-cf-required';
+		}
 
 		$html = sprintf(
 			'<span class="oli-cf-form-control-wrap" data-name="%s">',
@@ -338,9 +348,11 @@ class Oli_CF_Form_Parser {
 		);
 
 		$html .= sprintf(
-			'<span class="oli-cf-list-item"><label><input type="checkbox" name="%s" value="1" id="%s" class="oli-cf-field oli-cf-acceptance" required="required" aria-required="true" aria-invalid="false" /><span class="oli-cf-list-item-label">%s</span></label></span>',
+			'<span class="oli-cf-list-item"><label><input type="checkbox" name="%s" value="1" id="%s" class="%s" %s aria-invalid="false" /><span class="oli-cf-list-item-label">%s</span></label></span>',
 			esc_attr( $name ),
 			esc_attr( $id ),
+			esc_attr( $class ),
+			$required ? 'required="required" aria-required="true"' : '',
 			wp_kses_post( $label )
 		);
 

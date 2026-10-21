@@ -28,7 +28,7 @@ This document provides comprehensive testing instructions for Oli Contact Form.
 1. **Create a Simple Form**
    - Go to "Oli Contact Forms" > "Add New"
    - Title: "Contact Form Test"
-   - Use default template (should include name, email, subject, message, submit)
+   - Use default template (should include name, email, subject, message, optional consent, submit)
    - Publish the form
    - Note the form ID for shortcode testing
 
@@ -71,7 +71,7 @@ Test each field type individually:
 
 1. **Configure Mail Settings**
    - To: Your email address
-   - From: `[your-email]`
+   - From: site admin email (not `[your-email]`, to avoid SPF/DMARC failures)
    - Subject: `New message from [your-name]`
    - Body: Include all field placeholders
    - Reply-To: `[your-email]`
