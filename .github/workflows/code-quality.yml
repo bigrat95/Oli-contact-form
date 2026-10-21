@@ -10,26 +10,24 @@ jobs:
   lint:
     name: PHP Lint & PHPCS
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v3
-    
+    - uses: actions/checkout@v4
+
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
         php-version: '7.4'
-        tools: composer, phpcs
-    
+        tools: composer
+
     - name: PHP Syntax Check
       run: find . -name "*.php" -not -path "./vendor/*" -exec php -l {} \;
-    
-    - name: Install PHPCS
-      run: composer global require "squizlabs/php_codesniffer=*"
-    
-    - name: Install WordPress Coding Standards
+
+    - name: Install PHPCS and WordPress Coding Standards
       run: |
-        composer global require "wp-coding-standards/wpcs=*"
-        phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
-    
+        composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+        composer global require "squizlabs/php_codesniffer:^3.13.5" "wp-coding-standards/wpcs:^3.1"
+        echo "$(composer global config home --quiet)/vendor/bin" >> "$GITHUB_PATH"
+
     - name: Run PHPCS
       run: phpcs --standard=WordPress --extensions=php --ignore=vendor/ .

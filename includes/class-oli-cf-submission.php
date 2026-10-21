@@ -59,11 +59,17 @@ class Oli_CF_Submission {
 		// Redirect with result.
 		$redirect_url = wp_get_referer();
 
+		$status_args = array(
+			'oli_cf_status_nonce' => wp_create_nonce( 'oli_cf_status_' . $form_id ),
+		);
+
 		if ( $result['success'] ) {
-			$redirect_url = add_query_arg( 'oli_cf_success', $form_id, $redirect_url );
+			$status_args['oli_cf_success'] = $form_id;
 		} else {
-			$redirect_url = add_query_arg( 'oli_cf_error', $form_id, $redirect_url );
+			$status_args['oli_cf_error'] = $form_id;
 		}
+
+		$redirect_url = add_query_arg( $status_args, $redirect_url );
 
 		wp_safe_redirect( $redirect_url );
 		exit;

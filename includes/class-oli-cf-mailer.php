@@ -19,7 +19,7 @@ class Oli_CF_Mailer {
 	 * @return bool True on success, false on failure.
 	 */
 	public static function send( $form_id, $data, $files = array() ) {
-		$mail_settings = get_post_meta( $form_id, '_oli_cf_mail', true );
+		$mail_settings   = get_post_meta( $form_id, '_oli_cf_mail', true );
 		$mail_2_settings = get_post_meta( $form_id, '_oli_cf_mail_2', true );
 
 		if ( empty( $mail_settings ) ) {
@@ -46,20 +46,20 @@ class Oli_CF_Mailer {
 	 * @return bool True on success, false on failure.
 	 */
 	private static function send_mail( $settings, $data, $files ) {
-		$to = self::replace_tags( $settings['to'], $data );
+		$to      = self::replace_tags( $settings['to'], $data );
 		$subject = self::replace_tags( $settings['subject'], $data );
-		$body = self::replace_tags( $settings['body'], $data );
+		$body    = self::replace_tags( $settings['body'], $data );
 		$headers = array();
 
 		// From header.
 		if ( ! empty( $settings['from'] ) ) {
-			$from = self::replace_tags( $settings['from'], $data );
+			$from      = self::replace_tags( $settings['from'], $data );
 			$headers[] = 'From: ' . $from;
 		}
 
 		// Reply-To header.
 		if ( ! empty( $settings['reply_to'] ) ) {
-			$reply_to = self::replace_tags( $settings['reply_to'], $data );
+			$reply_to  = self::replace_tags( $settings['reply_to'], $data );
 			$headers[] = 'Reply-To: ' . $reply_to;
 		}
 
@@ -106,7 +106,7 @@ class Oli_CF_Mailer {
 	private static function replace_tags( $text, $data ) {
 		return preg_replace_callback(
 			'/\[([^\]]+)\]/',
-			function( $matches ) use ( $data ) {
+			function ( $matches ) use ( $data ) {
 				$field_name = $matches[1];
 
 				if ( isset( $data[ $field_name ] ) ) {

@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Document Google reCAPTCHA v3 and Cloudflare Turnstile in `readme.txt` under `== External services ==` (when they run, data sent, terms and privacy links).
 - Extract the CF7 importer "select all" inline script into `assets/js/oli-cf-importer.js` and enqueue it with `wp_enqueue_script`.
+- Move the honeypot off-screen style from an inline `style` attribute into `assets/css/oli-cf-public.css`.
+- Prefix captcha script handles as `oli-cf-recaptcha` and `oli-cf-turnstile`.
+- Enqueue public CSS/JS and captcha scripts only when a form shortcode or block is present.
+- Sign non-AJAX redirect status query args with `oli_cf_status_nonce`.
+- Pin the GitHub Actions workflow to `squizlabs/php_codesniffer` 3.x so WPCS 3 can install.
 
 ## [0.1.0] - 2026-10-19
 

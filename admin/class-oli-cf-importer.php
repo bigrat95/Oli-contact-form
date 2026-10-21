@@ -121,7 +121,7 @@ class Oli_CF_Importer {
 
 		foreach ( $form_ids as $form_id ) {
 			if ( $this->import_cf7_form( $form_id ) ) {
-				$imported_count++;
+				++$imported_count;
 			}
 		}
 
@@ -172,9 +172,9 @@ class Oli_CF_Importer {
 
 		// Get CF7 form data.
 		$cf7_form_data = get_post_meta( $cf7_form_id, '_form', true );
-		$cf7_mail = get_post_meta( $cf7_form_id, '_mail', true );
-		$cf7_mail_2 = get_post_meta( $cf7_form_id, '_mail_2', true );
-		$cf7_messages = get_post_meta( $cf7_form_id, '_messages', true );
+		$cf7_mail      = get_post_meta( $cf7_form_id, '_mail', true );
+		$cf7_mail_2    = get_post_meta( $cf7_form_id, '_mail_2', true );
+		$cf7_messages  = get_post_meta( $cf7_form_id, '_messages', true );
 
 		// Convert form template.
 		$form_template = $this->convert_cf7_template( $cf7_form_data );

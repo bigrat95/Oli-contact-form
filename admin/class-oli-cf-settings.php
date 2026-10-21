@@ -168,7 +168,7 @@ class Oli_CF_Settings {
 	 */
 	public function render_checkbox_field( $args ) {
 		$options = get_option( 'oli_cf_settings', array() );
-		$field = $args['field'];
+		$field   = $args['field'];
 		$checked = ! empty( $options[ $field ] );
 		?>
 		<label>
@@ -189,9 +189,9 @@ class Oli_CF_Settings {
 	 */
 	public function render_text_field( $args ) {
 		$options = get_option( 'oli_cf_settings', array() );
-		$field = $args['field'];
-		$value = isset( $options[ $field ] ) ? $options[ $field ] : '';
-		$type = isset( $args['type'] ) ? $args['type'] : 'text';
+		$field   = $args['field'];
+		$value   = isset( $options[ $field ] ) ? $options[ $field ] : '';
+		$type    = isset( $args['type'] ) ? $args['type'] : 'text';
 		?>
 		<input type="<?php echo esc_attr( $type ); ?>" name="oli_cf_settings[<?php echo esc_attr( $field ); ?>]" value="<?php echo esc_attr( $value ); ?>" class="regular-text" />
 		<?php
@@ -206,12 +206,12 @@ class Oli_CF_Settings {
 	public function sanitize_settings( $input ) {
 		$sanitized = array();
 
-		$sanitized['recaptcha_enabled'] = ! empty( $input['recaptcha_enabled'] );
-		$sanitized['recaptcha_site_key'] = sanitize_text_field( $input['recaptcha_site_key'] ?? '' );
+		$sanitized['recaptcha_enabled']    = ! empty( $input['recaptcha_enabled'] );
+		$sanitized['recaptcha_site_key']   = sanitize_text_field( $input['recaptcha_site_key'] ?? '' );
 		$sanitized['recaptcha_secret_key'] = sanitize_text_field( $input['recaptcha_secret_key'] ?? '' );
 
-		$sanitized['turnstile_enabled'] = ! empty( $input['turnstile_enabled'] );
-		$sanitized['turnstile_site_key'] = sanitize_text_field( $input['turnstile_site_key'] ?? '' );
+		$sanitized['turnstile_enabled']    = ! empty( $input['turnstile_enabled'] );
+		$sanitized['turnstile_site_key']   = sanitize_text_field( $input['turnstile_site_key'] ?? '' );
 		$sanitized['turnstile_secret_key'] = sanitize_text_field( $input['turnstile_secret_key'] ?? '' );
 
 		$sanitized['cf7_compat_enabled'] = ! empty( $input['cf7_compat_enabled'] );

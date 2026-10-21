@@ -23,7 +23,7 @@ class Oli_CF_Form_Parser {
 		// Parse all tags.
 		$html = preg_replace_callback(
 			'/\[([^\]]+)\]/',
-			function( $matches ) use ( $form_id ) {
+			function ( $matches ) use ( $form_id ) {
 				return self::parse_tag( $matches[1], $form_id );
 			},
 			$html
@@ -40,7 +40,7 @@ class Oli_CF_Form_Parser {
 	 * @return string HTML for the tag.
 	 */
 	private static function parse_tag( $tag, $form_id ) {
-		$tag = trim( $tag );
+		$tag   = trim( $tag );
 		$parts = preg_split( '/\s+/', $tag );
 
 		if ( empty( $parts ) ) {
@@ -53,12 +53,12 @@ class Oli_CF_Form_Parser {
 		// Check for required marker (*).
 		if ( substr( $type_raw, -1 ) === '*' ) {
 			$required = true;
-			$type = rtrim( $type_raw, '*' );
+			$type     = rtrim( $type_raw, '*' );
 		} else {
 			$type = $type_raw;
 		}
 
-		$name = ! empty( $parts ) ? array_shift( $parts ) : '';
+		$name    = ! empty( $parts ) ? array_shift( $parts ) : '';
 		$options = $parts;
 
 		// Parse type-specific tags.
@@ -109,15 +109,15 @@ class Oli_CF_Form_Parser {
 	 */
 	private static function render_input_field( $type, $name, $required, $options, $form_id ) {
 		$attributes = self::parse_options( $options );
-		$id = 'oli-cf-' . $form_id . '-' . sanitize_key( $name );
-		$class = 'oli-cf-field oli-cf-' . $type;
+		$id         = 'oli-cf-' . $form_id . '-' . sanitize_key( $name );
+		$class      = 'oli-cf-field oli-cf-' . $type;
 
 		if ( $required ) {
 			$class .= ' oli-cf-required';
 		}
 
 		$placeholder = isset( $attributes['placeholder'] ) ? $attributes['placeholder'] : '';
-		$default = isset( $attributes['default'] ) ? $attributes['default'] : '';
+		$default     = isset( $attributes['default'] ) ? $attributes['default'] : '';
 
 		$html = sprintf(
 			'<span class="oli-cf-form-control-wrap" data-name="%s">',
@@ -151,17 +151,17 @@ class Oli_CF_Form_Parser {
 	 */
 	private static function render_textarea( $name, $required, $options, $form_id ) {
 		$attributes = self::parse_options( $options );
-		$id = 'oli-cf-' . $form_id . '-' . sanitize_key( $name );
-		$class = 'oli-cf-field oli-cf-textarea';
+		$id         = 'oli-cf-' . $form_id . '-' . sanitize_key( $name );
+		$class      = 'oli-cf-field oli-cf-textarea';
 
 		if ( $required ) {
 			$class .= ' oli-cf-required';
 		}
 
 		$placeholder = isset( $attributes['placeholder'] ) ? $attributes['placeholder'] : '';
-		$default = isset( $attributes['default'] ) ? $attributes['default'] : '';
-		$rows = isset( $attributes['rows'] ) ? intval( $attributes['rows'] ) : 4;
-		$cols = isset( $attributes['cols'] ) ? intval( $attributes['cols'] ) : 40;
+		$default     = isset( $attributes['default'] ) ? $attributes['default'] : '';
+		$rows        = isset( $attributes['rows'] ) ? intval( $attributes['rows'] ) : 4;
+		$cols        = isset( $attributes['cols'] ) ? intval( $attributes['cols'] ) : 40;
 
 		$html = sprintf(
 			'<span class="oli-cf-form-control-wrap" data-name="%s">',
@@ -195,7 +195,7 @@ class Oli_CF_Form_Parser {
 	 * @return string HTML.
 	 */
 	private static function render_select( $name, $required, $options, $form_id ) {
-		$id = 'oli-cf-' . $form_id . '-' . sanitize_key( $name );
+		$id    = 'oli-cf-' . $form_id . '-' . sanitize_key( $name );
 		$class = 'oli-cf-field oli-cf-select';
 
 		if ( $required ) {
@@ -223,7 +223,7 @@ class Oli_CF_Form_Parser {
 		// Add options.
 		foreach ( $options as $option ) {
 			$option = trim( $option, '"' );
-			$html .= sprintf(
+			$html  .= sprintf(
 				'<option value="%s">%s</option>',
 				esc_attr( $option ),
 				esc_html( $option )
@@ -246,7 +246,7 @@ class Oli_CF_Form_Parser {
 	 * @return string HTML.
 	 */
 	private static function render_checkbox( $name, $required, $options, $form_id ) {
-		$id = 'oli-cf-' . $form_id . '-' . sanitize_key( $name );
+		$id    = 'oli-cf-' . $form_id . '-' . sanitize_key( $name );
 		$class = 'oli-cf-field oli-cf-checkbox';
 
 		if ( $required ) {
@@ -259,7 +259,7 @@ class Oli_CF_Form_Parser {
 		);
 
 		foreach ( $options as $index => $option ) {
-			$option = trim( $option, '"' );
+			$option      = trim( $option, '"' );
 			$checkbox_id = $id . '-' . $index;
 
 			$html .= sprintf(
@@ -288,7 +288,7 @@ class Oli_CF_Form_Parser {
 	 * @return string HTML.
 	 */
 	private static function render_radio( $name, $required, $options, $form_id ) {
-		$id = 'oli-cf-' . $form_id . '-' . sanitize_key( $name );
+		$id    = 'oli-cf-' . $form_id . '-' . sanitize_key( $name );
 		$class = 'oli-cf-field oli-cf-radio';
 
 		if ( $required ) {
@@ -301,7 +301,7 @@ class Oli_CF_Form_Parser {
 		);
 
 		foreach ( $options as $index => $option ) {
-			$option = trim( $option, '"' );
+			$option   = trim( $option, '"' );
 			$radio_id = $id . '-' . $index;
 
 			$html .= sprintf(
@@ -329,7 +329,7 @@ class Oli_CF_Form_Parser {
 	 * @return string HTML.
 	 */
 	private static function render_acceptance( $name, $options, $form_id ) {
-		$id = 'oli-cf-' . $form_id . '-' . sanitize_key( $name );
+		$id    = 'oli-cf-' . $form_id . '-' . sanitize_key( $name );
 		$label = ! empty( $options ) ? implode( ' ', $options ) : __( 'I accept the terms', 'oli-contact-form' );
 
 		$html = sprintf(
@@ -360,15 +360,15 @@ class Oli_CF_Form_Parser {
 	 */
 	private static function render_file( $name, $required, $options, $form_id ) {
 		$attributes = self::parse_options( $options );
-		$id = 'oli-cf-' . $form_id . '-' . sanitize_key( $name );
-		$class = 'oli-cf-field oli-cf-file';
+		$id         = 'oli-cf-' . $form_id . '-' . sanitize_key( $name );
+		$class      = 'oli-cf-field oli-cf-file';
 
 		if ( $required ) {
 			$class .= ' oli-cf-required';
 		}
 
 		$accept = isset( $attributes['filetypes'] ) ? $attributes['filetypes'] : '';
-		$limit = isset( $attributes['limit'] ) ? $attributes['limit'] : '';
+		$limit  = isset( $attributes['limit'] ) ? $attributes['limit'] : '';
 
 		$html = sprintf(
 			'<span class="oli-cf-form-control-wrap" data-name="%s">',
@@ -420,7 +420,7 @@ class Oli_CF_Form_Parser {
 
 		foreach ( $options as $option ) {
 			if ( strpos( $option, ':' ) !== false ) {
-				list( $key, $value ) = explode( ':', $option, 2 );
+				list( $key, $value )        = explode( ':', $option, 2 );
 				$attributes[ trim( $key ) ] = trim( $value, '"' );
 			}
 		}

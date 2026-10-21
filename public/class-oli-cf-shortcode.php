@@ -73,6 +73,7 @@ class Oli_CF_Shortcode {
 			'post_type'      => 'oli_contact_form',
 			'posts_per_page' => 1,
 			'post_status'    => 'publish',
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- one published form by imported CF7 ID.
 			'meta_query'     => array(
 				array(
 					'key'   => '_oli_cf_imported_from_cf7',
@@ -109,18 +110,22 @@ class Oli_CF_Shortcode {
 			return '';
 		}
 
-		// Check for success/error messages.
+		Oli_CF_Public::enqueue_form_assets();
+
 		$success_message = '';
-		$error_message = '';
+		$error_message   = '';
+		$status_nonce    = isset( $_GET['oli_cf_status_nonce'] ) ? sanitize_text_field( wp_unslash( $_GET['oli_cf_status_nonce'] ) ) : '';
 
-		if ( isset( $_GET['oli_cf_success'] ) && absint( $_GET['oli_cf_success'] ) === $form_id ) {
-			$messages = get_post_meta( $form_id, '_oli_cf_messages', true );
-			$success_message = ! empty( $messages['mail_sent_ok'] ) ? $messages['mail_sent_ok'] : __( 'Thank you for your message. It has been sent.', 'oli-contact-form' );
-		}
+		if ( wp_verify_nonce( $status_nonce, 'oli_cf_status_' . $form_id ) ) {
+			if ( isset( $_GET['oli_cf_success'] ) && absint( wp_unslash( $_GET['oli_cf_success'] ) ) === $form_id ) {
+				$messages        = get_post_meta( $form_id, '_oli_cf_messages', true );
+				$success_message = ! empty( $messages['mail_sent_ok'] ) ? $messages['mail_sent_ok'] : __( 'Thank you for your message. It has been sent.', 'oli-contact-form' );
+			}
 
-		if ( isset( $_GET['oli_cf_error'] ) && absint( $_GET['oli_cf_error'] ) === $form_id ) {
-			$messages = get_post_meta( $form_id, '_oli_cf_messages', true );
-			$error_message = ! empty( $messages['mail_sent_ng'] ) ? $messages['mail_sent_ng'] : __( 'There was an error sending your message. Please try again.', 'oli-contact-form' );
+			if ( isset( $_GET['oli_cf_error'] ) && absint( wp_unslash( $_GET['oli_cf_error'] ) ) === $form_id ) {
+				$messages      = get_post_meta( $form_id, '_oli_cf_messages', true );
+				$error_message = ! empty( $messages['mail_sent_ng'] ) ? $messages['mail_sent_ng'] : __( 'There was an error sending your message. Please try again.', 'oli-contact-form' );
+			}
 		}
 
 		$settings = get_option( 'oli_cf_settings', array() );
@@ -142,8 +147,7 @@ class Oli_CF_Shortcode {
 				<input type="hidden" name="oli_cf_form_id" value="<?php echo absint( $form_id ); ?>" />
 				<input type="hidden" name="oli_cf_timestamp" value="<?php echo esc_attr( time() ); ?>" />
 
-				<!-- Honeypot field -->
-				<div style="position:absolute;left:-5000px;" aria-hidden="true">
+				<div class="oli-cf-honeypot" aria-hidden="true">
 					<input type="text" name="oli_cf_hp" value="" tabindex="-1" autocomplete="off" />
 				</div>
 

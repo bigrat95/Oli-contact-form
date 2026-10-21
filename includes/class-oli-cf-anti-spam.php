@@ -28,7 +28,7 @@ class Oli_CF_Anti_Spam {
 		// Time trap check (form must take at least 3 seconds to submit).
 		if ( ! empty( $data['oli_cf_timestamp'] ) ) {
 			$timestamp = intval( $data['oli_cf_timestamp'] );
-			$elapsed = time() - $timestamp;
+			$elapsed   = time() - $timestamp;
 
 			if ( $elapsed < 3 ) {
 				return array(

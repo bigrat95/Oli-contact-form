@@ -261,6 +261,10 @@ class Oli_CF_Meta_Boxes {
 			return;
 		}
 
+		if ( ! $post instanceof WP_Post || 'oli_contact_form' !== $post->post_type ) {
+			return;
+		}
+
 		// Check permissions.
 		if ( ! current_user_can( 'edit_post', $post_id ) ) {
 			return;
@@ -273,17 +277,17 @@ class Oli_CF_Meta_Boxes {
 
 		// Save mail settings.
 		if ( isset( $_POST['oli_cf_mail'] ) ) {
-			$mail = array_map( 'sanitize_text_field', wp_unslash( $_POST['oli_cf_mail'] ) );
-			$mail['body'] = isset( $_POST['oli_cf_mail']['body'] ) ? sanitize_textarea_field( wp_unslash( $_POST['oli_cf_mail']['body'] ) ) : '';
+			$mail                       = array_map( 'sanitize_text_field', wp_unslash( $_POST['oli_cf_mail'] ) );
+			$mail['body']               = isset( $_POST['oli_cf_mail']['body'] ) ? sanitize_textarea_field( wp_unslash( $_POST['oli_cf_mail']['body'] ) ) : '';
 			$mail['additional_headers'] = isset( $_POST['oli_cf_mail']['additional_headers'] ) ? sanitize_textarea_field( wp_unslash( $_POST['oli_cf_mail']['additional_headers'] ) ) : '';
 			update_post_meta( $post_id, '_oli_cf_mail', $mail );
 		}
 
 		// Save mail 2 settings.
 		if ( isset( $_POST['oli_cf_mail_2'] ) ) {
-			$mail_2 = array_map( 'sanitize_text_field', wp_unslash( $_POST['oli_cf_mail_2'] ) );
-			$mail_2['enabled'] = ! empty( $_POST['oli_cf_mail_2']['enabled'] );
-			$mail_2['body'] = isset( $_POST['oli_cf_mail_2']['body'] ) ? sanitize_textarea_field( wp_unslash( $_POST['oli_cf_mail_2']['body'] ) ) : '';
+			$mail_2                       = array_map( 'sanitize_text_field', wp_unslash( $_POST['oli_cf_mail_2'] ) );
+			$mail_2['enabled']            = ! empty( $_POST['oli_cf_mail_2']['enabled'] );
+			$mail_2['body']               = isset( $_POST['oli_cf_mail_2']['body'] ) ? sanitize_textarea_field( wp_unslash( $_POST['oli_cf_mail_2']['body'] ) ) : '';
 			$mail_2['additional_headers'] = isset( $_POST['oli_cf_mail_2']['additional_headers'] ) ? sanitize_textarea_field( wp_unslash( $_POST['oli_cf_mail_2']['additional_headers'] ) ) : '';
 			update_post_meta( $post_id, '_oli_cf_mail_2', $mail_2 );
 		}
@@ -335,9 +339,9 @@ class Oli_CF_Meta_Boxes {
 	 */
 	private function get_default_messages() {
 		return array(
-			'mail_sent_ok'      => __( 'Thank you for your message. It has been sent.', 'oli-contact-form' ),
-			'mail_sent_ng'      => __( 'There was an error sending your message. Please try again.', 'oli-contact-form' ),
-			'validation_error'  => __( 'One or more fields have an error. Please check and try again.', 'oli-contact-form' ),
+			'mail_sent_ok'     => __( 'Thank you for your message. It has been sent.', 'oli-contact-form' ),
+			'mail_sent_ng'     => __( 'There was an error sending your message. Please try again.', 'oli-contact-form' ),
+			'validation_error' => __( 'One or more fields have an error. Please check and try again.', 'oli-contact-form' ),
 		);
 	}
 }

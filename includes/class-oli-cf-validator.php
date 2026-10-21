@@ -29,7 +29,7 @@ class Oli_CF_Validator {
 		}
 
 		foreach ( $matches[1] as $tag ) {
-			$tag = trim( $tag );
+			$tag   = trim( $tag );
 			$parts = preg_split( '/\s+/', $tag );
 
 			if ( empty( $parts ) ) {
@@ -42,14 +42,14 @@ class Oli_CF_Validator {
 			// Check for required marker.
 			if ( substr( $type_raw, -1 ) === '*' ) {
 				$required = true;
-				$type = rtrim( $type_raw, '*' );
+				$type     = rtrim( $type_raw, '*' );
 			} else {
 				$type = $type_raw;
 			}
 
 			$name = ! empty( $parts ) ? array_shift( $parts ) : '';
 
-			if ( empty( $name ) || $type === 'submit' ) {
+			if ( empty( $name ) || 'submit' === $type ) {
 				continue;
 			}
 
@@ -80,22 +80,20 @@ class Oli_CF_Validator {
 
 		// Check required.
 		if ( $required ) {
-			if ( $type === 'file' ) {
+			if ( 'file' === $type ) {
 				if ( empty( $files[ $name ] ) || empty( $files[ $name ]['name'] ) ) {
 					return __( 'This field is required.', 'oli-contact-form' );
 				}
-			} elseif ( $type === 'checkbox' ) {
+			} elseif ( 'checkbox' === $type ) {
 				if ( empty( $value ) || ! is_array( $value ) ) {
 					return __( 'This field is required.', 'oli-contact-form' );
 				}
-			} elseif ( $type === 'acceptance' ) {
-				if ( empty( $value ) || $value !== '1' ) {
+			} elseif ( 'acceptance' === $type ) {
+				if ( empty( $value ) || '1' !== $value ) {
 					return __( 'You must accept this to proceed.', 'oli-contact-form' );
 				}
-			} else {
-				if ( empty( $value ) && $value !== '0' ) {
-					return __( 'This field is required.', 'oli-contact-form' );
-				}
+			} elseif ( empty( $value ) && '0' !== $value ) {
+				return __( 'This field is required.', 'oli-contact-form' );
 			}
 		}
 
@@ -179,7 +177,7 @@ class Oli_CF_Validator {
 		$attributes = array();
 		foreach ( $options as $option ) {
 			if ( strpos( $option, ':' ) !== false ) {
-				list( $key, $value ) = explode( ':', $option, 2 );
+				list( $key, $value )        = explode( ':', $option, 2 );
 				$attributes[ trim( $key ) ] = trim( $value, '"' );
 			}
 		}
@@ -199,7 +197,7 @@ class Oli_CF_Validator {
 		// Validate file type.
 		if ( isset( $attributes['filetypes'] ) ) {
 			$allowed_types = array_map( 'trim', explode( '|', $attributes['filetypes'] ) );
-			$file_ext = strtolower( pathinfo( $file['name'], PATHINFO_EXTENSION ) );
+			$file_ext      = strtolower( pathinfo( $file['name'], PATHINFO_EXTENSION ) );
 
 			if ( ! in_array( $file_ext, $allowed_types, true ) ) {
 				return sprintf(
@@ -220,7 +218,7 @@ class Oli_CF_Validator {
 	 * @return int Size in bytes.
 	 */
 	private static function parse_size( $size ) {
-		$size = strtolower( trim( $size ) );
+		$size  = strtolower( trim( $size ) );
 		$value = intval( $size );
 
 		if ( strpos( $size, 'gb' ) !== false ) {
