@@ -41,7 +41,14 @@ class Oli_CF_Admin {
 	public function enqueue_styles() {
 		$screen = get_current_screen();
 
-		if ( ! $screen || ( 'oli_contact_form' !== $screen->post_type && 'oli-contact-forms_page_oli-cf-settings' !== $screen->id ) ) {
+		$extra_screens = array(
+			'oli_contact_form_page_oli-cf-settings',
+			'oli-contact-forms_page_oli-cf-settings',
+			'oli_contact_form_page_oli-cf-messages',
+			'oli-contact-forms_page_oli-cf-messages',
+		);
+
+		if ( ! $screen || ( 'oli_contact_form' !== $screen->post_type && ! in_array( $screen->id, $extra_screens, true ) ) ) {
 			return;
 		}
 

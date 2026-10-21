@@ -14,7 +14,10 @@ class Oli_CF_Deactivator {
 	 * Deactivate the plugin.
 	 */
 	public static function deactivate() {
-		// Flush rewrite rules.
+		require_once plugin_dir_path( __FILE__ ) . 'class-oli-cf-message-store.php';
+
+		Oli_CF_Message_Store::unschedule_cron();
+
 		flush_rewrite_rules();
 	}
 }

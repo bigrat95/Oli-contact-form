@@ -132,6 +132,10 @@ class Oli_CF_Submission {
 		// Send email.
 		$sent = Oli_CF_Mailer::send( $form_id, $post, $files );
 
+		if ( $sent ) {
+			Oli_CF_Message_Store::maybe_save( $form_id, $post, $files );
+		}
+
 		// Clean up uploaded files.
 		if ( ! empty( $files ) ) {
 			foreach ( $files as $file ) {

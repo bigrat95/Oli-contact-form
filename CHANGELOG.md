@@ -5,6 +5,17 @@ All notable changes to Oli Contact Form will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-10-21
+
+### Added
+- Optional **Keep a copy of messages** setting (disabled by default).
+- `{prefix}oli_cf_messages` table for successful submissions.
+- Messages admin screen (`WP_List_Table`): date, form, sender, preview, detail view.
+- Single and bulk delete (`manage_options`, nonces).
+- Retention period in days (default 30, `0` = unlimited) with a daily WP-Cron purge.
+- Privacy exporters/erasers by email and suggested policy text via `wp_add_privacy_policy_content`.
+- `uninstall.php` drops the table, options, cron, and contact form posts.
+
 ## [0.1.1] - 2026-10-21
 
 ### Changed
@@ -63,7 +74,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PHPCS WordPress coding standards
 
 ### Known Limitations
-- No submission database storage (email only)
+- Submission copies stay off unless an administrator enables them
 - File uploads are attached to email then deleted (not stored permanently)
 - Basic phone number validation (format not country-specific)
 - CF7 advanced features not supported (conditional logic, dynamic dropdowns, etc.)
@@ -71,7 +82,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned for Future Releases
-- Optional submission database storage with admin viewing
 - Export submissions to CSV
 - More advanced conditional logic
 - Email template editor with preview

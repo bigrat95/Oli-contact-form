@@ -56,11 +56,13 @@ class Oli_CF {
 		require_once OLI_CF_PLUGIN_DIR . 'includes/class-oli-cf-mailer.php';
 		require_once OLI_CF_PLUGIN_DIR . 'includes/class-oli-cf-submission.php';
 		require_once OLI_CF_PLUGIN_DIR . 'includes/class-oli-cf-anti-spam.php';
+		require_once OLI_CF_PLUGIN_DIR . 'includes/class-oli-cf-message-store.php';
 
 		require_once OLI_CF_PLUGIN_DIR . 'admin/class-oli-cf-admin.php';
 		require_once OLI_CF_PLUGIN_DIR . 'admin/class-oli-cf-meta-boxes.php';
 		require_once OLI_CF_PLUGIN_DIR . 'admin/class-oli-cf-settings.php';
 		require_once OLI_CF_PLUGIN_DIR . 'admin/class-oli-cf-importer.php';
+		require_once OLI_CF_PLUGIN_DIR . 'admin/class-oli-cf-messages-admin.php';
 
 		require_once OLI_CF_PLUGIN_DIR . 'public/class-oli-cf-public.php';
 		require_once OLI_CF_PLUGIN_DIR . 'public/class-oli-cf-shortcode.php';
@@ -105,6 +107,11 @@ class Oli_CF {
 		$this->loader->add_action( 'admin_menu', $importer, 'add_importer_page' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $importer, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_post_oli_cf_import_cf7', $importer, 'handle_import' );
+
+		// Stored messages.
+		$messages_admin = new Oli_CF_Messages_Admin();
+		$this->loader->add_action( 'admin_menu', $messages_admin, 'add_messages_page' );
+		$this->loader->add_action( 'admin_init', $messages_admin, 'handle_actions' );
 	}
 
 	/**
@@ -128,6 +135,13 @@ class Oli_CF {
 		$this->loader->add_action( 'wp_ajax_oli_cf_submit_form', $submission, 'handle_ajax_submission' );
 		$this->loader->add_action( 'wp_ajax_nopriv_oli_cf_submit_form', $submission, 'handle_ajax_submission' );
 		$this->loader->add_action( 'init', $submission, 'handle_non_ajax_submission' );
+
+		$this->loader->add_action( 'plugins_loaded', 'Oli_CF_Message_Store', 'maybe_install' );
+		$this->loader->add_action( 'plugins_loaded', 'Oli_CF_Message_Store', 'schedule_cron' );
+		$this->loader->add_action( Oli_CF_Message_Store::CRON_HOOK, 'Oli_CF_Message_Store', 'purge_expired' );
+		$this->loader->add_filter( 'wp_privacy_personal_data_exporters', 'Oli_CF_Message_Store', 'register_exporter' );
+		$this->loader->add_filter( 'wp_privacy_personal_data_erasers', 'Oli_CF_Message_Store', 'register_eraser' );
+		$this->loader->add_action( 'admin_init', 'Oli_CF_Message_Store', 'add_privacy_policy_content' );
 	}
 
 	/**

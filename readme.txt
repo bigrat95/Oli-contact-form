@@ -4,7 +4,7 @@ Tags: contact form, form, email, ajax, contact
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.1
+Stable tag: 0.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,6 +31,7 @@ Oli Contact Form is a deliberately simple alternative to Contact Form 7, designe
 * **Multilingual Ready** - Works with TranslatePress, WPML, and other translation plugins
 * **CF7 Importer** - Convert existing Contact Form 7 forms with one click
 * **CF7 Shortcode Compatibility** - Optional mapping so `[contact-form-7]` shortcodes work after migration
+* **Optional Message Copies** - Keep a copy of submissions in WordPress (off by default) with retention and privacy tools
 * **No Tracking** - Respects user privacy, no data sent to third parties unless you enable anti-spam services
 * **Themeable CSS** - Minimal styling that adapts to your theme
 
@@ -65,6 +66,21 @@ When **Enable Cloudflare Turnstile** is checked and a site key is saved, visitor
 * Privacy: [https://www.cloudflare.com/privacypolicy/](https://www.cloudflare.com/privacypolicy/)
 
 Secret keys are stored in the WordPress options table and are never printed in storefront HTML or JavaScript.
+
+== Privacy ==
+
+By default this plugin does **not** store form submissions. Messages are sent with WordPress `wp_mail()` only.
+
+If an administrator enables **Keep a copy of messages** under Oli Contact Forms → Settings:
+
+* Submitted fields (name, email, message text, and other form fields) are saved in the `{prefix}oli_cf_messages` table.
+* Copies are listed under Oli Contact Forms → Messages (date, form, sender, preview, and a detail view).
+* An administrator with `manage_options` can delete one message or several at once.
+* A daily WP-Cron job deletes copies older than the configured retention (default 30 days; `0` means keep until deleted manually).
+* Tools → Export Personal Data and Tools → Erase Personal Data can export or delete stored copies by email address.
+* Suggested privacy-policy text is added under Settings → Privacy.
+
+File uploads are attached to the notification email and are not stored. Uninstalling the plugin drops the messages table, deletes settings, clears the purge cron, and removes contact form posts.
 
 == Installation ==
 
@@ -101,7 +117,11 @@ The plugin includes honeypot and time trap protection by default. For additional
 
 = Where are form submissions stored? =
 
-Version 0.1.0 does not store submissions in the database. All submissions are sent via email using WordPress's `wp_mail()` function.
+By default they are not stored. Submissions are sent by email. If you enable **Keep a copy of messages**, successful submissions are saved in the `oli_cf_messages` table and appear under Messages. Set a retention period (default 30 days) or use 0 to keep them until you delete them.
+
+= How do I export or erase a visitor's stored message? =
+
+Use the WordPress privacy tools (Tools → Export Personal Data / Erase Personal Data) with the visitor's email address. Suggested policy wording is available under Settings → Privacy.
 
 = Can I customize the styling? =
 
@@ -116,6 +136,13 @@ Yes. The plugin includes minimal CSS that you can override in your theme. All fo
 5. CF7 importer
 
 == Changelog ==
+
+= 0.2.0 =
+* Optional “Keep a copy of messages” setting (off by default).
+* Stored copies use the `{prefix}oli_cf_messages` table and a Messages admin list (date, form, sender, preview, detail).
+* Single and bulk delete, daily retention purge (default 30 days, 0 = unlimited).
+* WordPress privacy exporters, erasers, and suggested privacy-policy text.
+* Uninstall removes stored messages, settings, the cron event, and form posts.
 
 = 0.1.1 =
 * Document Google reCAPTCHA v3 and Cloudflare Turnstile under External services (what, when, data sent, terms and privacy).
@@ -141,6 +168,9 @@ Yes. The plugin includes minimal CSS that you can override in your theme. All fo
 * Accessible and multilingual ready
 
 == Upgrade Notice ==
+
+= 0.2.0 =
+Optional stored message copies (off by default), retention purge, and WordPress privacy tools.
 
 = 0.1.1 =
 Documents optional Google/Turnstile calls, removes inline JS/CSS, and loads front-end scripts only on form pages.

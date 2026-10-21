@@ -123,6 +123,37 @@ class Oli_CF_Settings {
 				'description' => __( 'Allow [contact-form-7] shortcode to be served by Oli Contact Form after migration.', 'oli-contact-form' ),
 			)
 		);
+
+		add_settings_section(
+			'oli_cf_storage_section',
+			__( 'Stored messages', 'oli-contact-form' ),
+			array( $this, 'render_storage_section' ),
+			'oli-cf-settings'
+		);
+
+		add_settings_field(
+			'store_messages',
+			__( 'Keep a copy of messages', 'oli-contact-form' ),
+			array( $this, 'render_checkbox_field' ),
+			'oli-cf-settings',
+			'oli_cf_storage_section',
+			array(
+				'field'       => 'store_messages',
+				'description' => __( 'Save a copy of each successful submission in WordPress. Off by default.', 'oli-contact-form' ),
+			)
+		);
+
+		add_settings_field(
+			'retention_days',
+			__( 'Retention period (days)', 'oli-contact-form' ),
+			array( $this, 'render_number_field' ),
+			'oli-cf-settings',
+			'oli_cf_storage_section',
+			array(
+				'field'       => 'retention_days',
+				'description' => __( 'Copies older than this are deleted daily. Use 0 to keep them until you delete them.', 'oli-contact-form' ),
+			)
+		);
 	}
 
 	/**
@@ -162,6 +193,13 @@ class Oli_CF_Settings {
 	}
 
 	/**
+	 * Render stored-messages section description.
+	 */
+	public function render_storage_section() {
+		echo '<p>' . esc_html__( 'Optional copies are stored in a dedicated oli_cf_messages table and can be reviewed under Messages. They contain personal data submitted through your forms.', 'oli-contact-form' ) . '</p>';
+	}
+
+	/**
 	 * Render checkbox field.
 	 *
 	 * @param array $args Field arguments.
@@ -198,6 +236,23 @@ class Oli_CF_Settings {
 	}
 
 	/**
+	 * Render number field.
+	 *
+	 * @param array $args Field arguments.
+	 */
+	public function render_number_field( $args ) {
+		$options = Oli_CF_Message_Store::get_settings();
+		$field   = $args['field'];
+		$value   = isset( $options[ $field ] ) ? $options[ $field ] : 0;
+		?>
+		<input type="number" min="0" step="1" name="oli_cf_settings[<?php echo esc_attr( $field ); ?>]" value="<?php echo esc_attr( $value ); ?>" class="small-text" />
+		<?php
+		if ( ! empty( $args['description'] ) ) {
+			echo '<p class="description">' . esc_html( $args['description'] ) . '</p>';
+		}
+	}
+
+	/**
 	 * Sanitize settings.
 	 *
 	 * @param array $input Input values.
@@ -215,6 +270,9 @@ class Oli_CF_Settings {
 		$sanitized['turnstile_secret_key'] = sanitize_text_field( $input['turnstile_secret_key'] ?? '' );
 
 		$sanitized['cf7_compat_enabled'] = ! empty( $input['cf7_compat_enabled'] );
+
+		$sanitized['store_messages'] = ! empty( $input['store_messages'] );
+		$sanitized['retention_days'] = isset( $input['retention_days'] ) ? absint( $input['retention_days'] ) : 30;
 
 		return $sanitized;
 	}
