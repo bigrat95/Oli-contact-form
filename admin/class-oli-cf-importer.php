@@ -25,6 +25,25 @@ class Oli_CF_Importer {
 	}
 
 	/**
+	 * Enqueue the importer "select all" script on the CF7 import screen.
+	 *
+	 * @param string $hook Current admin page hook.
+	 */
+	public function enqueue_scripts( $hook ) {
+		if ( false === strpos( $hook, 'oli-cf-import-cf7' ) ) {
+			return;
+		}
+
+		wp_enqueue_script(
+			'oli-cf-importer',
+			OLI_CF_PLUGIN_URL . 'assets/js/oli-cf-importer.js',
+			array(),
+			OLI_CF_VERSION,
+			true
+		);
+	}
+
+	/**
 	 * Render importer page.
 	 */
 	public function render_importer_page() {
@@ -74,15 +93,6 @@ class Oli_CF_Importer {
 						<?php submit_button( __( 'Import Selected Forms', 'oli-contact-form' ), 'primary', 'submit', false ); ?>
 					</p>
 				</form>
-
-				<script>
-				document.getElementById('oli-cf-select-all').addEventListener('change', function() {
-					var checkboxes = document.querySelectorAll('.oli-cf-import-checkbox');
-					checkboxes.forEach(function(checkbox) {
-						checkbox.checked = this.checked;
-					}.bind(this));
-				});
-				</script>
 			<?php endif; ?>
 		</div>
 		<?php

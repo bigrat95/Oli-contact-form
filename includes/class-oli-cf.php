@@ -103,6 +103,7 @@ class Oli_CF {
 		// Importer.
 		$importer = new Oli_CF_Importer();
 		$this->loader->add_action( 'admin_menu', $importer, 'add_importer_page' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $importer, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_post_oli_cf_import_cf7', $importer, 'handle_import' );
 	}
 

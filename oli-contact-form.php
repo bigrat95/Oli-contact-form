@@ -3,7 +3,7 @@
  * Plugin Name: Oli Contact Form
  * Plugin URI: https://olivierbigras.com/oli-contact-form
  * Description: A simple, accessible contact form plugin with CF7-like tag syntax and built-in anti-spam protection.
- * Version: 0.1.0
+ * Version: 0.1.1
  * Author: Olivier Bigras
  * Author URI: https://olivierbigras.com/
  * License: GPL v2 or later
@@ -21,7 +21,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define( 'OLI_CF_VERSION', '0.1.0' );
+define( 'OLI_CF_VERSION', '0.1.1' );
 define( 'OLI_CF_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'OLI_CF_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'OLI_CF_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
