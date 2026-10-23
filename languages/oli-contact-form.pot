@@ -1,0 +1,342 @@
+# Copyright (C) 2026 Olivier Bigras
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Oli Contact Form 0.2.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/oli-contact-form\n"
+"POT-Creation-Date: 2026-10-19 00:00:00+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2026-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: includes/class-oli-cf-validator.php
+msgid "This field is required."
+msgstr ""
+
+msgid "You must accept this to proceed."
+msgstr ""
+
+msgid "Please enter a valid email address."
+msgstr ""
+
+msgid "Please enter a valid URL."
+msgstr ""
+
+msgid "Please enter a valid phone number."
+msgstr ""
+
+msgid "Please enter a valid number."
+msgstr ""
+
+msgid "Please enter a valid date."
+msgstr ""
+
+msgid "The uploaded file is too large."
+msgstr ""
+
+msgid "The file was only partially uploaded."
+msgstr ""
+
+msgid "No file was uploaded."
+msgstr ""
+
+msgid "File upload failed."
+msgstr ""
+
+msgid "The uploaded file exceeds the maximum allowed size of %s."
+msgstr ""
+
+msgid "This file type is not allowed. Allowed types: %s"
+msgstr ""
+
+#: includes/class-oli-cf-anti-spam.php
+msgid "Spam detected."
+msgstr ""
+
+msgid "Form submitted too quickly."
+msgstr ""
+
+msgid "reCAPTCHA verification failed. Please try again."
+msgstr ""
+
+msgid "Spam detected by reCAPTCHA."
+msgstr ""
+
+msgid "Turnstile verification failed. Please try again."
+msgstr ""
+
+msgid "Spam detected by Turnstile."
+msgstr ""
+
+#: includes/class-oli-cf-submission.php
+msgid "Invalid form ID."
+msgstr ""
+
+msgid "Security check failed."
+msgstr ""
+
+msgid "Form not found."
+msgstr ""
+
+msgid "Form configuration error."
+msgstr ""
+
+msgid "Please correct the errors below."
+msgstr ""
+
+msgid "There was an error sending your message. Please try again."
+msgstr ""
+
+msgid "Thank you for your message. It has been sent."
+msgstr ""
+
+#: includes/class-oli-cf-post-type.php
+msgid "Contact Forms"
+msgstr ""
+
+msgid "Contact Form"
+msgstr ""
+
+msgid "Oli Contact Forms"
+msgstr ""
+
+msgid "Add New"
+msgstr ""
+
+msgid "Add New Contact Form"
+msgstr ""
+
+msgid "New Contact Form"
+msgstr ""
+
+msgid "Edit Contact Form"
+msgstr ""
+
+msgid "View Contact Form"
+msgstr ""
+
+msgid "All Forms"
+msgstr ""
+
+msgid "Search Contact Forms"
+msgstr ""
+
+msgid "No contact forms found."
+msgstr ""
+
+msgid "No contact forms found in Trash."
+msgstr ""
+
+#: admin/class-oli-cf-meta-boxes.php
+msgid "Form"
+msgstr ""
+
+msgid "Mail"
+msgstr ""
+
+msgid "Mail (2)"
+msgstr ""
+
+msgid "Messages"
+msgstr ""
+
+msgid "Shortcode"
+msgstr ""
+
+msgid "text"
+msgstr ""
+
+msgid "email"
+msgstr ""
+
+msgid "tel"
+msgstr ""
+
+msgid "url"
+msgstr ""
+
+msgid "number"
+msgstr ""
+
+msgid "date"
+msgstr ""
+
+msgid "textarea"
+msgstr ""
+
+msgid "select"
+msgstr ""
+
+msgid "checkbox"
+msgstr ""
+
+msgid "radio"
+msgstr ""
+
+msgid "acceptance"
+msgstr ""
+
+msgid "file"
+msgstr ""
+
+msgid "submit"
+msgstr ""
+
+msgid "Use CF7-like tag syntax. Example: [text* your-name placeholder:\"Your name\"] [email* your-email] [textarea your-message] [submit \"Send\"]"
+msgstr ""
+
+msgid "To"
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+msgid "Subject"
+msgstr ""
+
+msgid "Message Body"
+msgstr ""
+
+msgid "Use [field-name] to insert field values."
+msgstr ""
+
+msgid "Use the site admin email. Putting the visitor address in From often fails SPF/DMARC. Put [your-email] in Reply-To instead."
+msgstr ""
+
+msgid "Reply-To"
+msgstr ""
+
+msgid "Additional Headers"
+msgstr ""
+
+msgid "Enable autoresponder (Mail 2)"
+msgstr ""
+
+msgid "Success Message"
+msgstr ""
+
+msgid "Error Message"
+msgstr ""
+
+msgid "Validation Error"
+msgstr ""
+
+msgid "Publish the form to get the shortcode."
+msgstr ""
+
+msgid "Copy this shortcode and paste it into your post, page, or text widget."
+msgstr ""
+
+msgid "Your name"
+msgstr ""
+
+msgid "Your email"
+msgstr ""
+
+msgid "Your subject"
+msgstr ""
+
+msgid "Your message"
+msgstr ""
+
+msgid "I consent to having this website store my submitted information so they can respond to my inquiry."
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "One or more fields have an error. Please check and try again."
+msgstr ""
+
+#: admin/class-oli-cf-settings.php
+msgid "Settings"
+msgstr ""
+
+msgid "Anti-spam Protection"
+msgstr ""
+
+msgid "Oli Contact Form includes built-in honeypot and time trap protection. Configure additional anti-spam services below if needed."
+msgstr ""
+
+msgid "Note: When enabled, external requests will be made to Google (reCAPTCHA) or Cloudflare (Turnstile) on form submission."
+msgstr ""
+
+msgid "Enable Google reCAPTCHA v3"
+msgstr ""
+
+msgid "reCAPTCHA Site Key"
+msgstr ""
+
+msgid "reCAPTCHA Secret Key"
+msgstr ""
+
+msgid "Enable Cloudflare Turnstile"
+msgstr ""
+
+msgid "Turnstile Site Key"
+msgstr ""
+
+msgid "Turnstile Secret Key"
+msgstr ""
+
+msgid "Contact Form 7 Compatibility"
+msgstr ""
+
+msgid "These options help with migration from Contact Form 7."
+msgstr ""
+
+msgid "Enable CF7 Shortcode Mapping"
+msgstr ""
+
+msgid "Allow [contact-form-7] shortcode to be served by Oli Contact Form after migration."
+msgstr ""
+
+#: admin/class-oli-cf-importer.php
+msgid "Import from CF7"
+msgstr ""
+
+msgid "Import from Contact Form 7"
+msgstr ""
+
+msgid "No Contact Form 7 forms found. Please make sure Contact Form 7 is installed and you have created some forms."
+msgstr ""
+
+msgid "This tool will import Contact Form 7 forms into Oli Contact Form. Form templates, mail settings, and messages will be converted."
+msgstr ""
+
+msgid "Form Title"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Import Selected Forms"
+msgstr ""
+
+msgid "You do not have permission to perform this action."
+msgstr ""
+
+msgid "I accept the terms"
+msgstr ""
+
+#: public/class-oli-cf-block.php
+msgid "Oli Contact Form"
+msgstr ""
+
+msgid "Display a contact form"
+msgstr ""
+
+msgid "-- Select a form --"
+msgstr ""
+
+msgid "Form Settings"
+msgstr ""
+
+msgid "Select Form"
+msgstr ""
+
+msgid "Please select a contact form from the block settings."
+msgstr ""

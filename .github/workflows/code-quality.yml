@@ -1,0 +1,36 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  lint:
+    name: PHP Lint & PHPCS
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4'
+        tools: composer
+
+    - name: PHP Syntax Check
+      run: find . -name "*.php" -not -path "./vendor/*" -exec php -l {} \;
+
+    - name: Install PHPCS and WordPress Coding Standards
+      run: |
+        composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+        composer global require "squizlabs/php_codesniffer:^3.13.5" "wp-coding-standards/wpcs:^3.1"
+        echo "$(composer global config home --quiet)/vendor/bin" >> "$GITHUB_PATH"
+
+    - name: Run PHPCS
+      run: phpcs --standard=WordPress --extensions=php --ignore=vendor/,tests/ .
+
+    - name: Run unit tests
+      run: php tests/test-message-store.php

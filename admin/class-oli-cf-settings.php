@@ -1,0 +1,283 @@
+<?php
+/**
+ * Settings page.
+ *
+ * @package Oli_Contact_Form
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Settings class.
+ */
+class Oli_CF_Settings {
+
+	/**
+	 * Add settings page to admin menu.
+	 */
+	public function add_settings_page() {
+		add_submenu_page(
+			'edit.php?post_type=oli_contact_form',
+			__( 'Settings', 'oli-contact-form' ),
+			__( 'Settings', 'oli-contact-form' ),
+			'manage_options',
+			'oli-cf-settings',
+			array( $this, 'render_settings_page' )
+		);
+	}
+
+	/**
+	 * Register settings.
+	 */
+	public function register_settings() {
+		register_setting(
+			'oli_cf_settings_group',
+			'oli_cf_settings',
+			array( $this, 'sanitize_settings' )
+		);
+
+		// Anti-spam section.
+		add_settings_section(
+			'oli_cf_anti_spam_section',
+			__( 'Anti-spam Protection', 'oli-contact-form' ),
+			array( $this, 'render_anti_spam_section' ),
+			'oli-cf-settings'
+		);
+
+		// reCAPTCHA fields.
+		add_settings_field(
+			'recaptcha_enabled',
+			__( 'Enable Google reCAPTCHA v3', 'oli-contact-form' ),
+			array( $this, 'render_checkbox_field' ),
+			'oli-cf-settings',
+			'oli_cf_anti_spam_section',
+			array( 'field' => 'recaptcha_enabled' )
+		);
+
+		add_settings_field(
+			'recaptcha_site_key',
+			__( 'reCAPTCHA Site Key', 'oli-contact-form' ),
+			array( $this, 'render_text_field' ),
+			'oli-cf-settings',
+			'oli_cf_anti_spam_section',
+			array( 'field' => 'recaptcha_site_key' )
+		);
+
+		add_settings_field(
+			'recaptcha_secret_key',
+			__( 'reCAPTCHA Secret Key', 'oli-contact-form' ),
+			array( $this, 'render_text_field' ),
+			'oli-cf-settings',
+			'oli_cf_anti_spam_section',
+			array(
+				'field' => 'recaptcha_secret_key',
+				'type'  => 'password',
+			)
+		);
+
+		// Turnstile fields.
+		add_settings_field(
+			'turnstile_enabled',
+			__( 'Enable Cloudflare Turnstile', 'oli-contact-form' ),
+			array( $this, 'render_checkbox_field' ),
+			'oli-cf-settings',
+			'oli_cf_anti_spam_section',
+			array( 'field' => 'turnstile_enabled' )
+		);
+
+		add_settings_field(
+			'turnstile_site_key',
+			__( 'Turnstile Site Key', 'oli-contact-form' ),
+			array( $this, 'render_text_field' ),
+			'oli-cf-settings',
+			'oli_cf_anti_spam_section',
+			array( 'field' => 'turnstile_site_key' )
+		);
+
+		add_settings_field(
+			'turnstile_secret_key',
+			__( 'Turnstile Secret Key', 'oli-contact-form' ),
+			array( $this, 'render_text_field' ),
+			'oli-cf-settings',
+			'oli_cf_anti_spam_section',
+			array(
+				'field' => 'turnstile_secret_key',
+				'type'  => 'password',
+			)
+		);
+
+		// CF7 compatibility section.
+		add_settings_section(
+			'oli_cf_compat_section',
+			__( 'Contact Form 7 Compatibility', 'oli-contact-form' ),
+			array( $this, 'render_compat_section' ),
+			'oli-cf-settings'
+		);
+
+		add_settings_field(
+			'cf7_compat_enabled',
+			__( 'Enable CF7 Shortcode Mapping', 'oli-contact-form' ),
+			array( $this, 'render_checkbox_field' ),
+			'oli-cf-settings',
+			'oli_cf_compat_section',
+			array(
+				'field'       => 'cf7_compat_enabled',
+				'description' => __( 'Allow [contact-form-7] shortcode to be served by Oli Contact Form after migration.', 'oli-contact-form' ),
+			)
+		);
+
+		add_settings_section(
+			'oli_cf_storage_section',
+			__( 'Stored messages', 'oli-contact-form' ),
+			array( $this, 'render_storage_section' ),
+			'oli-cf-settings'
+		);
+
+		add_settings_field(
+			'store_messages',
+			__( 'Keep a copy of messages', 'oli-contact-form' ),
+			array( $this, 'render_checkbox_field' ),
+			'oli-cf-settings',
+			'oli_cf_storage_section',
+			array(
+				'field'       => 'store_messages',
+				'description' => __( 'Save a copy of each successful submission in WordPress. Off by default.', 'oli-contact-form' ),
+			)
+		);
+
+		add_settings_field(
+			'retention_days',
+			__( 'Retention period (days)', 'oli-contact-form' ),
+			array( $this, 'render_number_field' ),
+			'oli-cf-settings',
+			'oli_cf_storage_section',
+			array(
+				'field'       => 'retention_days',
+				'description' => __( 'Copies older than this are deleted daily. Use 0 to keep them until you delete them.', 'oli-contact-form' ),
+			)
+		);
+	}
+
+	/**
+	 * Render settings page.
+	 */
+	public function render_settings_page() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+		?>
+		<div class="wrap">
+			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+			<form method="post" action="options.php">
+				<?php
+				settings_fields( 'oli_cf_settings_group' );
+				do_settings_sections( 'oli-cf-settings' );
+				submit_button();
+				?>
+			</form>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render anti-spam section description.
+	 */
+	public function render_anti_spam_section() {
+		echo '<p>' . esc_html__( 'Oli Contact Form includes built-in honeypot and time trap protection. Configure additional anti-spam services below if needed.', 'oli-contact-form' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'Note: When enabled, external requests will be made to Google (reCAPTCHA) or Cloudflare (Turnstile) on form submission.', 'oli-contact-form' ) . '</p>';
+	}
+
+	/**
+	 * Render compatibility section description.
+	 */
+	public function render_compat_section() {
+		echo '<p>' . esc_html__( 'These options help with migration from Contact Form 7.', 'oli-contact-form' ) . '</p>';
+	}
+
+	/**
+	 * Render stored-messages section description.
+	 */
+	public function render_storage_section() {
+		echo '<p>' . esc_html__( 'Optional copies are stored in a dedicated oli_cf_messages table and can be reviewed under Messages. They contain personal data submitted through your forms.', 'oli-contact-form' ) . '</p>';
+	}
+
+	/**
+	 * Render checkbox field.
+	 *
+	 * @param array $args Field arguments.
+	 */
+	public function render_checkbox_field( $args ) {
+		$options = get_option( 'oli_cf_settings', array() );
+		$field   = $args['field'];
+		$checked = ! empty( $options[ $field ] );
+		?>
+		<label>
+			<input type="checkbox" name="oli_cf_settings[<?php echo esc_attr( $field ); ?>]" value="1" <?php checked( $checked ); ?> />
+			<?php
+			if ( ! empty( $args['description'] ) ) {
+				echo '<span class="description">' . esc_html( $args['description'] ) . '</span>';
+			}
+			?>
+		</label>
+		<?php
+	}
+
+	/**
+	 * Render text field.
+	 *
+	 * @param array $args Field arguments.
+	 */
+	public function render_text_field( $args ) {
+		$options = get_option( 'oli_cf_settings', array() );
+		$field   = $args['field'];
+		$value   = isset( $options[ $field ] ) ? $options[ $field ] : '';
+		$type    = isset( $args['type'] ) ? $args['type'] : 'text';
+		?>
+		<input type="<?php echo esc_attr( $type ); ?>" name="oli_cf_settings[<?php echo esc_attr( $field ); ?>]" value="<?php echo esc_attr( $value ); ?>" class="regular-text" />
+		<?php
+	}
+
+	/**
+	 * Render number field.
+	 *
+	 * @param array $args Field arguments.
+	 */
+	public function render_number_field( $args ) {
+		$options = Oli_CF_Message_Store::get_settings();
+		$field   = $args['field'];
+		$value   = isset( $options[ $field ] ) ? $options[ $field ] : 0;
+		?>
+		<input type="number" min="0" step="1" name="oli_cf_settings[<?php echo esc_attr( $field ); ?>]" value="<?php echo esc_attr( $value ); ?>" class="small-text" />
+		<?php
+		if ( ! empty( $args['description'] ) ) {
+			echo '<p class="description">' . esc_html( $args['description'] ) . '</p>';
+		}
+	}
+
+	/**
+	 * Sanitize settings.
+	 *
+	 * @param array $input Input values.
+	 * @return array Sanitized values.
+	 */
+	public function sanitize_settings( $input ) {
+		$sanitized = array();
+
+		$sanitized['recaptcha_enabled']    = ! empty( $input['recaptcha_enabled'] );
+		$sanitized['recaptcha_site_key']   = sanitize_text_field( $input['recaptcha_site_key'] ?? '' );
+		$sanitized['recaptcha_secret_key'] = sanitize_text_field( $input['recaptcha_secret_key'] ?? '' );
+
+		$sanitized['turnstile_enabled']    = ! empty( $input['turnstile_enabled'] );
+		$sanitized['turnstile_site_key']   = sanitize_text_field( $input['turnstile_site_key'] ?? '' );
+		$sanitized['turnstile_secret_key'] = sanitize_text_field( $input['turnstile_secret_key'] ?? '' );
+
+		$sanitized['cf7_compat_enabled'] = ! empty( $input['cf7_compat_enabled'] );
+
+		$sanitized['store_messages'] = ! empty( $input['store_messages'] );
+		$sanitized['retention_days'] = isset( $input['retention_days'] ) ? absint( $input['retention_days'] ) : 30;
+
+		return $sanitized;
+	}
+}

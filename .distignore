@@ -1,0 +1,48 @@
+# Development files excluded from the wordpress.org ZIP.
+# Keep readme.txt. Do not ship internal markdown or tooling.
+
+# VCS and CI
+.git
+.gitignore
+.gitattributes
+.github
+
+# Tests and tooling
+tests
+bin
+node_modules
+vendor
+phpcs.xml
+phpcs.xml.dist
+.phpcs.xml
+.phpcs.xml.dist
+phpunit.xml
+phpunit.xml.dist
+composer.json
+composer.lock
+composer.phar
+package.json
+package-lock.json
+npm-shrinkwrap.json
+yarn.lock
+pnpm-lock.yaml
+
+# Internal markdown (readme.txt is the wordpress.org readme)
+*.md
+!readme.txt
+
+# Local / editor
+.cursor
+.vscode
+.idea
+.editorconfig
+.eslintrc
+.eslintrc.js
+.eslintrc.json
+.prettierrc
+.prettierrc.json
+
+# Dev scripts
+*.sh
+Makefile
+.distignore
